@@ -1,12 +1,17 @@
+"""
+This module is used to connect to the database
+"""
+
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+
 load_dotenv()
 
 user = os.getenv("USER")
-password = os.getenv("PASSWORD")
+password = os.getenv("POSTGRES_PASSWORD")
 database = os.getenv("DATABASE")
 host = os.getenv("HOST")
 port = os.getenv("PORT")

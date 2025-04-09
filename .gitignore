@@ -172,3 +172,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Ignore the override file, which is specific to local settings
+docker-compose.override.yml
+
+# Ignoring Docker images and containers
+docker-compose/*.log
+docker-compose/*.pid
+
+# Services`s values 
+postgres-data/*
