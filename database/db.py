@@ -18,5 +18,5 @@ port = os.getenv("PORT")
 
 URI = f"postgresql://{user}:{password}@{host}:{port}/{database}"
 
-engine = create_engine(URI, echo=True, pool_size=5, max_overflow=0)
+engine = create_engine(URI, echo=False, pool_size=5, max_overflow=0)
 SessionLocal = sessionmaker(bind=engine)

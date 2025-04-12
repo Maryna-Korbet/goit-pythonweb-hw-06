@@ -3,10 +3,8 @@ This module defines SQLAlchemy ORM models for a school management system.
 It includes classes for groups, students, teachers, subjects, and grades.
 """
 from datetime import datetime
-# from sqlalchemy import Integer, String, DateTime, ForeignKey, Float, func
 from sqlalchemy import Integer, String, DateTime, ForeignKey, Float
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-# from sqlalchemy.ext.hybrid import hybrid_property
 from typing import List
 
 
@@ -32,15 +30,12 @@ class Group(Base):
 
     students: Mapped[List["Student"]] = relationship(back_populates="group")
 
-    """ @hybrid_property
-    def count(self):
-        Returns the number of students in the group.
-        return len(self.students)
+    def __repr__(self) -> str:
+        return f"Group(id={self.id}, name='{self.name}')"
 
-    @count.expression
-    def count(cls):
-        return func.count(cls.students) """
-
+    def __str__(self) -> str:
+        return f"Group: {self.name}"
+    
 
 class Student(Base):
     """
@@ -71,15 +66,21 @@ class Student(Base):
         cascade="all, delete-orphan"
     )
 
-    """ @hybrid_property
-    def full_name(self):
-        Returns full name of the teacher.
+    @property
+    def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
-    @full_name.expression
-    def full_name(cls):
-        return func.concat(cls.first_name, " ", cls.last_name) """
+    def __repr__(self) -> str:
+        return (
+            f"Student(id={self.id}, "
+            f"first_name='{self.first_name}', "
+            f"last_name='{self.last_name}', "
+            f"group_id={self.group_id})"
+        )
 
+    def __str__(self) -> str:
+        return f"Student: {self.first_name} {self.last_name}"
+    
 
 class Teacher(Base):
     """
@@ -102,15 +103,6 @@ class Teacher(Base):
         "Subject", 
         back_populates="teacher"
     )
-
-    """ @hybrid_property
-    def full_name(self):
-        Returns full name of the teacher.
-        return f"{self.first_name} {self.last_name}"
-
-    @full_name.expression
-    def full_name(cls):
-        return func.concat(cls.first_name, " ", cls.last_name) """
 
 
 class Subject(Base):
@@ -138,6 +130,16 @@ class Subject(Base):
         cascade="all, delete-orphan"
     )
 
+    def __repr__(self) -> str:
+        return (
+            f"Subject(id={self.id}, "
+            f"name='{self.name}', "
+            f"teacher_id={self.teacher_id})"
+        )
+
+    def __str__(self) -> str:
+        return f"Subject: {self.name}"
+    
 
 class Grade(Base):
     """
@@ -172,3 +174,19 @@ class Grade(Base):
 
     student: Mapped["Student"] = relationship(back_populates="grades")
     subject: Mapped["Subject"] = relationship(back_populates="grades")
+
+    def __repr__(self) -> str:
+        return (
+            f"Grade(id={self.id}, "
+            f"student_id={self.student_id}, "
+            f"subject_id={self.subject_id}, "
+            f"grade={self.grade}, "
+            f"date_received='{self.date_received}')"
+        )
+
+    def __str__(self) -> str:
+        return (
+            f"Grade: {self.grade}, "
+            f"Student ID: {self.student_id}, "
+            f"Subject ID: {self.subject_id}"
+        )
